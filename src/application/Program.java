@@ -22,7 +22,7 @@ public class Program {
 		while (true) {
 			try {
 				UI.cleanScreen();
-				UI.printMatch(chessMatch);
+				UI.printMatch(chessMatch, captured);
 				System.out.println();
 				System.out.print("Source: ");
 				ChessPosition source = UI.readChessPosition(sc);
@@ -52,6 +52,6 @@ public class Program {
 			}
 		}
 		UI.cleanScreen();
-		UI.printMatch(chessMatch);
+		UI.printMatch(chessMatch, captured);
 	}
 }
