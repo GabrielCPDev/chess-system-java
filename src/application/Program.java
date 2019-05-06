@@ -9,7 +9,6 @@ import chess.ChessException;
 import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
-import application.UI;
 
 public class Program {
 
@@ -19,7 +18,7 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<>();
 		
-		while (true) {
+		while (!chessMatch.getCheckMate()) {
 			try {
 				UI.cleanScreen();
 				UI.printMatch(chessMatch, captured);
@@ -40,7 +39,11 @@ public class Program {
 					captured.add(capturedPiece);
 				}
 				
-				
+				if (chessMatch.getPromoted() != null) {
+					System.out.print("Enter piece for promotion (B/N/R/Q): ");
+					String type = sc.nextLine();
+					chessMatch.replacePromotedPiece(type);
+				}
 			}
 			catch (ChessException e) {
 				System.out.println(e.getMessage());
