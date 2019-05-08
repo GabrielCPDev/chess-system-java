@@ -34,10 +34,7 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 	
-	public static void cleanScreen() {
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
-	}
+	
 	
 	public static ChessPosition readChessPosition(Scanner sc) {
 		try {
@@ -52,21 +49,32 @@ public class UI {
 	}
 	
 	public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
-		printBoard(chessMatch.getPieces(), null);
+		printBoard(chessMatch.getPieces());
 		System.out.println();
 		printCapturedPieces(captured);
 		System.out.println();
-		System.out.println("Turn: "+ chessMatch.getTurn());
-		if (!chessMatch.getCheck()) {
-		System.out.println("Waiting player: "+chessMatch.getCurrentPlayer());
-	    if(chessMatch.getCheck()) {
-	    	System.out.println("CHECK!");
-	    }
-	}
+		System.out.println("Turn : " + chessMatch.getTurn());
+		if (!chessMatch.getCheckMate()) {
+			System.out.println("Waiting player: " + chessMatch.getCurrentPlayer());
+			if (chessMatch.getCheck()) {
+				System.out.println("CHECK!");
+			}
+		}
 		else {
 			System.out.println("CHECKMATE!");
-			System.out.println("Winner: "+ chessMatch.getCurrentPlayer());
+			System.out.println("Winner: " + chessMatch.getCurrentPlayer());
 		}
+	}
+	
+	public static void printBoard(ChessPiece[][] pieces) {
+		for (int i = 0; i < pieces.length; i++) {
+			System.out.print((8 - i) + " ");
+			for (int j = 0; j < pieces.length; j++) {
+				printPiece(pieces[i][j], false);
+			}
+			System.out.println();
+		}
+		System.out.println("  a b c d e f g h");
 	}
 
 	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
@@ -101,14 +109,22 @@ public class UI {
 	private static void printCapturedPieces(List<ChessPiece> captured) {
 		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE).collect(Collectors.toList());
 		List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BACK).collect(Collectors.toList());
-		System.out.println("Captured pieces: ");
-		System.out.println("White: ");
+		System.out.println("Captured pieces:");
+		System.out.print("White: ");
 		System.out.print(ANSI_WHITE);
 		System.out.println(Arrays.toString(white.toArray()));
-        System.out.print(ANSI_RESET); 
-        System.out.println("Black: ");
-        System.out.print(ANSI_YELLOW);
-        System.out.println(Arrays.deepToString(black.toArray()));
-        System.out.println(ANSI_RESET);
+		System.out.print(ANSI_RESET);
+		System.out.print("Black: ");
+		System.out.print(ANSI_YELLOW);
+		System.out.println(Arrays.toString(black.toArray()));
+		System.out.print(ANSI_RESET);
 	}
+
+	public static void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+		
+	}
+
+
 }
